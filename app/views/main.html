@@ -1,0 +1,33 @@
+<div class="row oneByOne">
+  <h4>Serveurs Inch </h4>
+
+  <div ng-if="! servers.length">Pas de serveurs à monitorer</div>
+
+  <div ng-if="!! servers.length">Les {{servers.length}} serveurs suivants seront pris en compte pour les analyses</div>
+  <ul class="list-group">
+    <li ng-repeat="server in servers" class="list-group-item">{{ server.server_url }}</li>
+  </ul>
+</div>
+
+<div class="row" ng-if="!! servers.length">
+  <h4>Analyse des données</h4>
+
+  <div tickets servers="servers"></div>
+  <div units servers="servers"></div>
+  <div units-by-kind servers="servers"></div>
+</div>
+
+<div class="row marketing">
+  <h4>HTML5 Boilerplate</h4>
+  <p>
+    HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
+  </p>
+
+  <h4>Angular</h4>
+  <p>
+    AngularJS is a toolset for building the framework most suited to your application development.
+  </p>
+
+  <h4>Karma</h4>
+  <p>Spectacular Test Runner for JavaScript.</p>
+</div>
