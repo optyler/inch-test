@@ -1,14 +1,14 @@
 {
  "total": {
-   "min": 1,
-   "max": 40,
-   "average": 31.5,
-   "weight": 200
+   "min": 5,
+   "max": 20,
+   "average": 30.5,
+   "weight": 100
  } ,
  "commonhold": {
-   "min": 20,
-   "max": 40,
-   "average": 30,
-   "weight": 150
+   "min": 10,
+   "max": 50,
+   "average": 40,
+   "weight": 120
  }
 }
