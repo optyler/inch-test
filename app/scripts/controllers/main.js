@@ -23,9 +23,11 @@ angular.module('inchTestApp')
         ticketService.gatherAndProcess(response.data).then(function(data) {
           $scope.tickets = data;
         }, error);
+        
         unitsService.gatherAndProcess(response.data).then(function(data) {
           $scope.units = data;
         }, error);
+        
         unitsByKindService.gatherAndProcess(response.data).then(function(data) {
           $scope.unitsByKind = data;
         }, error);
@@ -34,11 +36,5 @@ angular.module('inchTestApp')
     }
 
     credentialService.getCredentials().then(getData);
-
-    this.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
       
   }]);

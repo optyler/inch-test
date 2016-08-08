@@ -10,27 +10,51 @@
 angular.module('inchTestApp')
   .service('ticketService', ['$log', '$http', '$q', function ($log, $http, $q) {
 
+    // METHODS BEGINING WITH __ ARE NOT SUPPOSED TO BE USED OUTSIDE THE SERVICE EXCEPT IN TEST
+
+    // test if the fragment follows the 'schema'
+    this.__isValidFragment = function (fragment) {
+
+      var ret = fragment !== null && fragment !== undefined && typeof fragment === 'object';
+
+      if (! ret)
+        $log.warn('Ignoring the following fragment because it don\'t follows the json schema : ', fragment);
+
+      return ret;
+    };
+
+    this.__accumulate = function(prev, cur) {
+      for (var curKey in cur) {
+        if (cur.hasOwnProperty(curKey) && prev.hasOwnProperty(curKey)) {
+          prev[curKey] += cur[curKey];
+        } else {
+          prev[curKey] = cur[curKey];
+        }
+      }
+
+      return prev;
+    };
+
     this.gatherAndProcess = function(servers) {
 
+      var that = this;
+
       // for the tickets, we just accumulate the values for similar keys.
-      function success(responses) {
+      function process(responses) {
 
-        return responses.reduce(function(prev, cur, index, array) {
+        return responses.reduce(function(prev, cur, index) {
 
+          // cur is a promise, we only want the data
           cur = cur.data;
 
+          // the first time, prev === {}
           if (index === 0)
             return cur;
 
-          for (var curKey in cur) {
-            if (cur.hasOwnProperty(curKey) && prev.hasOwnProperty(curKey)) {
-              prev[curKey] += cur[curKey];
-            } else {
-              prev[curKey] = cur[curKey];
-            }
-          }
+          if ( ! that.__isValidFragment(cur) )
+            return prev;
 
-          return prev;
+          return that.__accumulate(prev, cur);
 
         }, {});
 
@@ -41,11 +65,12 @@ angular.module('inchTestApp')
         return err; // return err as it is a promise
       }
 
+      // All the requests to be made
+      // TODO: if too many calls, should execute chunks of 10 or 15 requests at a time
       var promises = servers.map(function(server) {
         return $http.get(server.server_url + '/tickets.json');
       });
-
-      return $q.all(promises).then(success, error);
+      return $q.all(promises).then(process, error);
     };
 
   }]);

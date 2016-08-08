@@ -11,8 +11,13 @@ describe('Service: credentialService', function () {
     credentialService = _credentialService_;
   }));
 
-  it('should do something', function () {
+  it('should initialize the service correctly the service', function () {
     expect(!!credentialService).toBe(true);
+    expect(credentialService.getCredentials).toBeDefined();
+  });
+
+  it('should return a promise with an array of 3 items', function() {
+    credentialService.getCredentials();
   });
 
 });
